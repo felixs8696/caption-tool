@@ -1,0 +1,29 @@
+@import "variables";
+
+.text-box-container {
+  height: 500px;
+  width: 49%;
+  margin: 5px;
+  padding: 5px;
+  float: left;
+}
+
+.subtitle-container {
+  overflow: scroll;
+}
+
+.text-box {
+  height: 500px;
+  width: 100%;
+  overflow: scroll;
+  border-radius: 3px;
+  padding: 10px;
+  resize: none;
+}
+
+.subtitle-box {
+  height: 50px;
+  border: 1px solid $border-gray;
+  border-radius: 3px;
+  padding: 5px;
+}
