@@ -16,4 +16,4 @@ angular.module('captionTool', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize'
 
   .run(runBlock)
   .controller('MainController', MainController)
-  .directive('acmeNavbar', () => new NavbarDirective())
+  .directive('acmeNavbar', () => new NavbarDirective());

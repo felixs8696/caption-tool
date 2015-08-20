@@ -17,8 +17,10 @@
   </div>
   <div class="text-box-container subtitle-container">
     <label>Generated Subtitles</label>
-    <div ng-repeat="subtitle in vm.subSceneArray">
-      <pre>{{subtitle}}</pre>
+    <br>
+    <div ng-repeat="subtitle in vm.subSceneArray" class="subtitle-box">
+      <pre><div class="subtitle-text-inner">{{$index + 1}}<br>{{subtitle}}</div><div class="time-input-container"><input ng-value="vm.placeholderTime($index * 5)" placeholder="hh:mm:ss:ms" class="time-input"/><input ng-value="vm.placeholderTime(($index + 1) * 5)" placeholder="hh:mm:ss:ms" class="time-input"/></div>
+      </pre>
     </div>
     <div ng-if="vm.subSceneArray.length === 0">
       <pre>Please submit a transcript to generate subtitles</pre>
