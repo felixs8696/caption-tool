@@ -223,7 +223,12 @@ class MainController {
 
   parseTime(time) {
     var lastColonIndex = time.lastIndexOf(':');
-    var timeString = time.substring(0, lastColonIndex) + ',' + time.substring(lastColonIndex + 1, time.length);
+    var ms = time.substring(lastColonIndex + 1, time.length);
+    var timeString = time.substring(0, lastColonIndex) + ',' + ms;
+    //to drag and drop with premier pro
+    if (ms.length < 3) {
+      timeString = time.substring(0, lastColonIndex) + ',' + ms + '0';
+    }
     return timeString;
   }
 

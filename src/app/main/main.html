@@ -7,6 +7,29 @@
   <div class="jumbotron text-center">
     <h1>Caption Tool</h1>
   </div>
+  <div>
+    <h2>Instructions:</h2>
+    <hr>
+    <p>
+      Note: This subtitle generator is mainly meant for Adobe Premier Pro and srt files.
+      To use this, simply type out the entire transcript in one paragraph chunk in the text area below.
+      Do not worry about formatting or spacing. If there is a specific break you would like the program to register,
+      you can optionally add '>>>>>>' wherever you would like the subtitles to break and continue in a separate scene
+      (Ex. cc1 >>>>>> cc2). Once finished, click the "Parse Into Subtitles" button to generate valid subtitles sections.<br><br>
+      After the subtitles boxes appear, you can add the start and end times for each of the captions (hh:mm:ss:ms).
+      Or you can click on the "Auto Times" button, which arbitrarily sets 5 seconds per scene times and uses those.
+      After you are finished entering the times, click the "Create File" button below and a download link will popup.
+      Click the link to download a .txt version of your file. To use it, rename the suffix to .srt and add the file as a subtitle file
+      for your video in your favorite media player (Works on VLC). See the page footer for upcoming improvements.
+    </p>
+    <h2>Tips:</h2>
+    <hr>
+    <ul>
+      <li>Start a little after a person speaks and end a little before they stop to avoid minor timing glitches.</li>
+      <li>Give a .5-1s leeway after a scene transition to prevent viewers from being constantly distracted by captions.</li>
+      <li>Use the '>>>>>>' break for every scene change to maintain the flow of the video.</li>
+    </ul>
+  </div>
   <div class="parent-container">
     <div class="text-box-container">
       <label>Full Manual Transcript</label>
@@ -32,4 +55,16 @@
       <a download="captions.txt" id="downloadlink" style="display: none">Download as .txt file</a>
     </div>
   </div>
+  <h2 class="center">Soon to Come</h2>
+  <hr>
+  <ul>
+    <li>Allow srt imports for propogation and re-editing</li>
+    <li>Allow text editing after parsing into subtitles</li>
+    <li>Allow for HTML5 embedded video with timer</li>
+    <li>Multi-caption editing</li>
+    <li>Keep track of 'immediate transition pairs'</li>
+    <li>Add .5-1s of transition time for transitions breaking sub-transcripts</li>
+    <li>Link to Firebase for data storage and authentication</li>
+    <li>Upload preview video to view results.</li>
+  </ul>
 </div>

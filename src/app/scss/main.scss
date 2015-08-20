@@ -108,10 +108,13 @@ textarea {
   width: 100%;
   display: block;
   font-size: 0;
-  height: 100vh;
 }
 
-@media screen and (max-width: 1000px) {
+.center {
+  text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
   .text-box-container {
     width: 100%;
   }
@@ -121,12 +124,12 @@ textarea {
   }
 }
 
-@media screen and (orientation: portrait) and (max-width: 800px){
-  .text-box-container {
-    width: 100%;
-  }
-
-  .subtitle-container {
-    width: 100%;
-  }
-}
+//@media screen and (orientation: portrait) and (max-width: 800px){
+//  .text-box-container {
+//    width: 100%;
+//  }
+//
+//  .subtitle-container {
+//    width: 100%;
+//  }
+//}
