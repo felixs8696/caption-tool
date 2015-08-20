@@ -1,5 +1,5 @@
 class MainController {
-  constructor ($timeout, MaxCharPerLine) {
+  constructor ($timeout, MaxCharPerLine, $window) {
     'ngInject';
 
     this.awesomeThings = [];
@@ -8,6 +8,7 @@ class MainController {
     this.activate($timeout);
     this.charLimit = MaxCharPerLine;
     this.subSceneArray = [];
+    this.window = $window;
   }
 
   activate($timeout) {
@@ -17,17 +18,15 @@ class MainController {
   }
 
   pushToSubSceneArray(subtitle) {
-    this.subSceneArray.push(subtitle);
+    this.subSceneArray.push({
+      index: this.subSceneArray.length + 1,
+      content: subtitle
+    });
   }
 
   parseTranscriptIntoSubscenes(transcript) {
     this.subSceneArray = [];
-    //let transcriptCopy = transcript;
-    //while(transcriptCopy.indexOf("\n\n") !== -1) {
-    //  console.log('checking');
-    //  transcriptCopy = transcriptCopy.replace(/(\r\n\r\n|\n\n|\r\r)/gm,"&&");
-    //}
-    let transcriptCopy = transcript.replace(new RegExp('(\n){2,}', 'gim') , '\n');
+    let transcriptCopy = transcript.replace(/(\r\n|\n|\r)/gm," ");
     while (transcriptCopy.length > 0) {
       let subtitle = this.parseSubTitle(transcriptCopy);
       let subtitleLength = (subtitle.line1+ subtitle.line2).length;
@@ -96,7 +95,6 @@ class MainController {
     for (var key in subtitleObj) {
       resultString += subtitleObj[key];
       if (key !== subtitleObj[subtitleObj[subtitleObj.length - 1]]) {
-        console.log('adding line break at: ', subtitleObj[key] );
         resultString += '\n';
       }
     }
@@ -105,10 +103,13 @@ class MainController {
 
   parseSubLine(maxSubLine) {
     let actualSubLine = '';
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 13; i++) {
       let currentLetter = maxSubLine.charAt(maxSubLine.length - i);
       if(this.isNotLetter(currentLetter) || i === maxSubLine.length) {
-        actualSubLine = maxSubLine.substring(0, maxSubLine.length - i);
+        actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
+      }
+      if (this.isASpace(currentLetter)) {
+        actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
         break;
       }
     }
@@ -121,6 +122,11 @@ class MainController {
   isNotLetter(character) {
     var code = character.charCodeAt(0);
     return !(((code >= 65) && (code <= 90)) || ((code >= 97) && (code <= 122)));
+  }
+
+  isASpace(character) {
+    var code = character.charCodeAt(0);
+    return code === 32;
   }
 
   placeholderTime(seconds) {
@@ -140,6 +146,46 @@ class MainController {
     }
     return time;
   }
+
+  createSrtFile() {
+    var srtText = this.generateSrtText();
+    var link = document.getElementById('downloadlink');
+    link.href = this.makeTextFile(srtText);
+    link.style.display = 'block';
+  }
+
+  makeTextFile(text) {
+    var textFile = null;
+    var data = new Blob([text], {type: 'srt/plain'});
+    if (textFile !== null) {
+      this.window.URL.revokeObjectURL(textFile);
+    }
+    textFile = this.window.URL.createObjectURL(data);
+    return textFile;
+  }
+
+  generateSrtText() {
+    var srtText = '';
+    for (var key in Object.keys(this.subSceneArray)) {
+      let subtitleObj = this.subSceneArray[key];
+      srtText += subtitleObj.index + '\n';
+      srtText += this.generateTimeString(subtitleObj.startTime, subtitleObj.endTime) + '\n';
+      srtText += subtitleObj.content + '\n\n';
+    }
+    return srtText;
+  }
+
+  parseTime(time) {
+    console.log(time);
+    var lastColonIndex = time.lastIndexOf(':');
+    var timeString = time.substring(0, lastColonIndex) + ',' + time.substring(lastColonIndex + 1, time.length);
+    return timeString;
+  }
+
+  generateTimeString(startTime, endTime) {
+    return this.parseTime(startTime) + ' --> ' + this.parseTime(endTime);
+  }
+
 }
 
 export default MainController;
