@@ -30,20 +30,25 @@ class MainController {
     while (transcriptCopy.length > 0) {
       let subtitle = this.parseSubTitle(transcriptCopy);
       let subtitleLength = (subtitle.line1+ subtitle.line2).length;
-      transcriptCopy = transcriptCopy.substring(subtitleLength, transcriptCopy.length);
       let line1 = this.deleteSpaces(subtitle.line1);
       let line2 = this.deleteSpaces(subtitle.line2);
+      let trimmedSubtitle = subtitle;
       if (line2) {
-        subtitle = {
+        trimmedSubtitle = {
           line1: line1,
           line2: line2
         };
       } else {
-        subtitle = {
+        trimmedSubtitle = {
           line1: line1
         };
       }
-      let subtitleString = this.stringifySubtitleObject(subtitle);
+      let subtitleString = this.stringifySubtitleObject(trimmedSubtitle);
+      if (subtitleString.charAt(subtitleString.length-2) === '-') {
+        console.log('broken');
+        subtitleLength = subtitleLength - 1;
+      }
+      transcriptCopy = transcriptCopy.substring(subtitleLength, transcriptCopy.length);
       this.pushToSubSceneArray(subtitleString);
     }
     console.log(this.subSceneArray);
@@ -66,12 +71,13 @@ class MainController {
       if (transcript.length < this.charLimit) {
         maxBreakIndex1 = transcript.length;
         getTwoLines = false;
-      } else if (transcript.length < this.charLimit * 2) {
-        maxBreakIndex2 = transcript.length - this.charLimit;
       }
       let maxSubLine1 = transcript.substring(0, maxBreakIndex1);
       let actualSubLine1 = this.parseSubLine(maxSubLine1);
       if (getTwoLines) {
+        if (transcript.length < this.charLimit * 2) {
+          maxBreakIndex2 = transcript.length - actualSubLine1.length;
+        }
         let maxSubLine2 = transcript.substring(actualSubLine1.length, actualSubLine1.length + maxBreakIndex2);
         let actualSubLine2 = this.parseSubLine(maxSubLine2);
         subtitleObj = {
@@ -114,7 +120,11 @@ class MainController {
       }
     }
     if (actualSubLine === '') {
-      actualSubLine = maxSubLine.substring(0, maxSubLine.length - 2) + '-';
+      if (maxSubLine.length === this.charLimit) {
+        actualSubLine = maxSubLine.substring(0, maxSubLine.length-1) + '-';
+      } else {
+        actualSubLine = maxSubLine.substring(0, maxSubLine.length);
+      }
     }
     return actualSubLine;
   }

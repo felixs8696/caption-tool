@@ -6,6 +6,7 @@
   margin: 5px;
   padding: 5px;
   float: left;
+  font-size: 14px;
 }
 
 .subtitle-container {
@@ -15,15 +16,16 @@
   border: 1px solid $border-color;
   border-radius: 3px;
   margin-bottom: 10px;
+  font-size: 14px;
 }
 
 .text-box {
   min-height: 500px;
   width: 100%;
+  resize: vertical;
   overflow: scroll;
   border-radius: 3px;
   padding: 10px;
-  resize: none;
   margin-bottom: 10px;
 }
 
@@ -36,6 +38,7 @@
   height: 90px;
   float: left;
   padding: 5px;
+  font-size: 14px;
 }
 
 .subtitle-box pre {
@@ -99,4 +102,11 @@
 
 textarea {
   border-color: $border-color;
+}
+
+.parent-container {
+  width: 100%;
+  display: block;
+  font-size: 0;
+  height: 100vh;
 }

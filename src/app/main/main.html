@@ -7,28 +7,28 @@
   <div class="jumbotron text-center">
     <h1>Caption Tool</h1>
   </div>
-
-  <div class="text-box-container">
-    <label>Full Manual Transcript</label>
-    <form ng-submit="vm.parseTranscriptIntoSubscenes(transcript)">
-      <textarea class="text-box" ng-model="transcript" placeholder="Type full transcript here..."></textarea>
-      <button class="styled-button" type="submit">Parse Into Subtitles</button>
-    </form>
-  </div>
-  <div class="text-box-container subtitles-container">
-    <label>Generated Subtitles</label>
-    <!--<br>-->
-    <div class="subtitle-container">
-      <div ng-repeat="subtitle in vm.subSceneArray" class="subtitle-box">
-      <pre><div class="subtitle-text-inner">{{$index + 1}}<br>{{subtitle.content}}</div><div class="time-input-container"><input placeholder="{{vm.placeholderTime($index * 5)}}" class="time-input" ng-model="subtitle.startTime" /><input placeholder="{{vm.placeholderTime(($index + 1) * 5)}}" class="time-input" ng-model="subtitle.endTime"/></div>
-      </pre>
-      </div>
-      <div ng-if="vm.subSceneArray.length === 0" class="placeholder-pre-container">
-        <pre>Please submit a transcript to generate subtitles</pre>
-      </div>
+  <div class="parent-container">
+    <div class="text-box-container">
+      <label>Full Manual Transcript</label>
+      <form ng-submit="vm.parseTranscriptIntoSubscenes(transcript)">
+        <textarea class="text-box" ng-model="transcript" placeholder="Type full transcript here..."></textarea>
+        <button class="styled-button" type="submit">Parse Into Subtitles</button>
+      </form>
     </div>
-    <button class="styled-button" id="create" type="submit" ng-click="vm.createSrtFile()">Create File</button>
-    <a download="captions.txt" id="downloadlink" style="display: none">Download as .txt file</a>
+    <div class="text-box-container subtitles-container">
+      <label>Generated Subtitles</label>
+      <!--<br>-->
+      <div class="subtitle-container">
+        <div ng-repeat="subtitle in vm.subSceneArray" class="subtitle-box">
+        <pre><div class="subtitle-text-inner">{{$index + 1}}<br>{{subtitle.content}}</div><div class="time-input-container"><input placeholder="{{vm.placeholderTime($index * 5)}}" class="time-input" ng-model="subtitle.startTime" /><input placeholder="{{vm.placeholderTime(($index + 1) * 5)}}" class="time-input" ng-model="subtitle.endTime"/></div>
+        </pre>
+        </div>
+        <div ng-if="vm.subSceneArray.length === 0" class="placeholder-pre-container">
+          <pre>Please submit a transcript to generate subtitles</pre>
+        </div>
+      </div>
+      <button class="styled-button" id="create" type="submit" ng-click="vm.createSrtFile()">Create File</button>
+      <a download="captions.txt" id="downloadlink" style="display: none">Download as .txt file</a>
+    </div>
   </div>
-
 </div>
