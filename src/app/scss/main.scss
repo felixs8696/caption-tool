@@ -3,9 +3,9 @@
 .text-box-container {
   height: 500px;
   width: 49%;
-  margin: 5px;
+  margin: 20px 5px 5px 5px;
   padding: 5px;
-  float: left;
+  display: inline-block;
   font-size: 14px;
 }
 
@@ -36,7 +36,7 @@
 .subtitle-box {
   width: 100%;
   height: 90px;
-  float: left;
+  display: inline-block;
   padding: 5px;
   font-size: 14px;
 }
@@ -68,12 +68,12 @@
 .time-input-container {
   width: 30%;
   padding: 0 2px;
-  float: left;
+  display: inline-block;
 }
 
 .subtitle-text-inner {
   width: 70%;
-  float: left;
+  display: inline-block;
 }
 
 #header {
@@ -96,7 +96,7 @@
 
 .placeholder-pre-container {
   width: 100%;
-  float: left;
+  display: inline-block;
   padding: 5px;
 }
 
@@ -109,4 +109,24 @@ textarea {
   display: block;
   font-size: 0;
   height: 100vh;
+}
+
+@media screen and (max-width: 600px) {
+  .text-box-container {
+    width: 100%;
+  }
+
+  .subtitle-container {
+    width: 100%;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 800px){
+  .text-box-container {
+    width: 100%;
+  }
+
+  .subtitle-container {
+    width: 100%;
+  }
 }
