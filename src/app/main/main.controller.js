@@ -8,6 +8,8 @@ class MainController {
     this.activate($timeout);
     this.charLimit = MaxCharPerLine;
     this.subSceneArray = [];
+    this.transcriptSceneList = [];
+    this.showAutoTimes = false;
     this.window = $window;
   }
 
@@ -17,6 +19,29 @@ class MainController {
     }, 4000);
   }
 
+  autoTimeVal(index, key) {
+    var timeVal = '';
+    if (key === 'start') {
+      timeVal = index * 5;
+    } else if (key === 'end') {
+      timeVal = (index + 1) * 5;
+    }
+    if (this.showAutoTimes) {
+      if (this.subSceneArray[index]) {
+        if (key === 'start') {
+          this.subSceneArray[index].startTime = this.placeholderTime(timeVal);
+        } else if (key === 'end') {
+          this.subSceneArray[index].endTime = this.placeholderTime(timeVal);
+        }
+      }
+      return this.placeholderTime(timeVal);
+    }
+  }
+
+  generateAutoTimes() {
+    this.showAutoTimes = true;
+  }
+
   pushToSubSceneArray(subtitle) {
     this.subSceneArray.push({
       index: this.subSceneArray.length + 1,
@@ -24,8 +49,16 @@ class MainController {
     });
   }
 
-  parseTranscriptIntoSubscenes(transcript) {
+  compileTranscriptScenes(transcript) {
     this.subSceneArray = [];
+    this.transcriptSceneList = transcript.split(">>>>>>");
+    for (var i = 0;i < this.transcriptSceneList.length; i++) {
+      this.parseTranscriptIntoSubscenes(this.transcriptSceneList[i]);
+    }
+    console.log(this.subSceneArray);
+  }
+
+  parseTranscriptIntoSubscenes(transcript) {
     let transcriptCopy = transcript.replace(/(\r\n|\n|\r)/gm," ");
     while (transcriptCopy.length > 0) {
       let subtitle = this.parseSubTitle(transcriptCopy);
@@ -45,13 +78,11 @@ class MainController {
       }
       let subtitleString = this.stringifySubtitleObject(trimmedSubtitle);
       if (subtitleString.charAt(subtitleString.length-2) === '-') {
-        console.log('broken');
         subtitleLength = subtitleLength - 1;
       }
       transcriptCopy = transcriptCopy.substring(subtitleLength, transcriptCopy.length);
       this.pushToSubSceneArray(subtitleString);
     }
-    console.log(this.subSceneArray);
   }
 
   deleteSpaces(subtitleLine) {
@@ -76,9 +107,10 @@ class MainController {
       let actualSubLine1 = this.parseSubLine(maxSubLine1);
       if (getTwoLines) {
         if (transcript.length < this.charLimit * 2) {
-          maxBreakIndex2 = transcript.length - actualSubLine1.length;
+          maxBreakIndex2 = transcript.length;
         }
         let maxSubLine2 = transcript.substring(actualSubLine1.length, actualSubLine1.length + maxBreakIndex2);
+        console.log(maxSubLine2);
         let actualSubLine2 = this.parseSubLine(maxSubLine2);
         subtitleObj = {
           line1: actualSubLine1,
@@ -108,25 +140,29 @@ class MainController {
   }
 
   parseSubLine(maxSubLine) {
-    let actualSubLine = '';
-    for (let i = 1; i <= 13; i++) {
-      let currentLetter = maxSubLine.charAt(maxSubLine.length - i);
-      if(this.isNotLetter(currentLetter) || i === maxSubLine.length) {
-        actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
+    if (maxSubLine.length === this.charLimit) {
+      let actualSubLine = '';
+      for (let i = 1; i <= 13; i++) {
+        let currentLetter = maxSubLine.charAt(maxSubLine.length - i);
+        if(this.isNotLetter(currentLetter) || i === maxSubLine.length) {
+          actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
+        }
+        if (this.isASpace(currentLetter)) {
+          actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
+          break;
+        }
       }
-      if (this.isASpace(currentLetter)) {
-        actualSubLine = maxSubLine.substring(0, maxSubLine.length - i + 1);
-        break;
+      if (actualSubLine === '') {
+        if (maxSubLine.length === this.charLimit) {
+          actualSubLine = maxSubLine.substring(0, maxSubLine.length-1) + '-';
+        } else {
+          actualSubLine = maxSubLine.substring(0, maxSubLine.length);
+        }
       }
+      return actualSubLine;
+    } else {
+      return maxSubLine;
     }
-    if (actualSubLine === '') {
-      if (maxSubLine.length === this.charLimit) {
-        actualSubLine = maxSubLine.substring(0, maxSubLine.length-1) + '-';
-      } else {
-        actualSubLine = maxSubLine.substring(0, maxSubLine.length);
-      }
-    }
-    return actualSubLine;
   }
 
   isNotLetter(character) {
@@ -186,7 +222,6 @@ class MainController {
   }
 
   parseTime(time) {
-    console.log(time);
     var lastColonIndex = time.lastIndexOf(':');
     var timeString = time.substring(0, lastColonIndex) + ',' + time.substring(lastColonIndex + 1, time.length);
     return timeString;

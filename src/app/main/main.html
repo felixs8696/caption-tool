@@ -10,7 +10,7 @@
   <div class="parent-container">
     <div class="text-box-container">
       <label>Full Manual Transcript</label>
-      <form ng-submit="vm.parseTranscriptIntoSubscenes(transcript)">
+      <form ng-submit="vm.compileTranscriptScenes(transcript)">
         <textarea class="text-box" ng-model="transcript" placeholder="Type full transcript here..."></textarea>
         <button class="styled-button" type="submit">Parse Into Subtitles</button>
       </form>
@@ -20,7 +20,7 @@
       <!--<br>-->
       <div class="subtitle-container">
         <div ng-repeat="subtitle in vm.subSceneArray" class="subtitle-box">
-        <pre><div class="subtitle-text-inner">{{$index + 1}}<br>{{subtitle.content}}</div><div class="time-input-container"><input placeholder="{{vm.placeholderTime($index * 5)}}" class="time-input" ng-model="subtitle.startTime" /><input placeholder="{{vm.placeholderTime(($index + 1) * 5)}}" class="time-input" ng-model="subtitle.endTime"/></div>
+        <pre><div class="subtitle-text-inner">{{$index + 1}}<br>{{subtitle.content}}</div><div class="time-input-container"><input ng-value="vm.autoTimeVal($index, 'start')" placeholder="{{vm.placeholderTime($index * 5)}}" class="time-input" ng-model="subtitle.startTime" /><input ng-value="vm.autoTimeVal($index, 'end')" placeholder="{{vm.placeholderTime(($index + 1) * 5)}}" class="time-input" ng-model="subtitle.endTime"/></div>
         </pre>
         </div>
         <div ng-if="vm.subSceneArray.length === 0" class="placeholder-pre-container">
@@ -28,6 +28,7 @@
         </div>
       </div>
       <button class="styled-button" id="create" type="submit" ng-click="vm.createSrtFile()">Create File</button>
+      <button class="styled-button" type="submit" ng-click="vm.generateAutoTimes()">Auto Times</button>
       <a download="captions.txt" id="downloadlink" style="display: none">Download as .txt file</a>
     </div>
   </div>
